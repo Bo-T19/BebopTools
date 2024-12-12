@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Application BebopTools</Name>
+    <Assembly>BebopTools.dll</Assembly>
+    <FullClassName>BebopTools.App</FullClassName>
+    <ClientId>e2054f84-4d18-4807-b4c9-6823960305e4</ClientId>
+    <VendorId>com.linkedin.santiago-botero-segura-8b4269315</VendorId>
+    <VendorDescription>Santiago Botero Segura, https://www.linkedin.com/in/santiago-botero-segura-8b4269315/</VendorDescription>
+  </AddIn>
+</RevitAddIns>

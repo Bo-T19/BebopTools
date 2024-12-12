@@ -1,0 +1,48 @@
+﻿<Window x:Class="BebopTools.WPF.FileSelectorForAssociateParams"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BebopTools.WPF"
+             mc:Ignorable="d" 
+             MaxHeight="500"
+             MaxWidth="600"
+              d:Height="500" d:Width="600"
+             ResizeMode="NoResize">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="10"/>
+                <ColumnDefinition  Width="*"/>
+                <ColumnDefinition  Width="*"/>
+                <ColumnDefinition  Width="*"/>
+                <ColumnDefinition  Width="10"/>
+            </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona el archivo de excel:" FontSize="14"/>
+        <TextBox Name ="PathTextBox"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
+        <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona el Project Parameter que vas a llenar masivamente:" FontSize="14"/>
+        <ComboBox Grid.Row="7" Grid.Column="1"  Grid.ColumnSpan="3" Name="TargetParametersList" ItemsSource="{Binding ParameterNamesList}"/>
+        <Label Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona el Project Parameter que vas a usar como guía:" FontSize="14"/>
+        <ComboBox Grid.Row="11" Grid.Column="1"  Grid.ColumnSpan="3" Name="SourceParametersList" ItemsSource="{Binding ParameterNamesList}"/>
+        <Button Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="1" Content="Seleccionar archivo" FontSize="14" Click="Select_Click"/>
+        <Button Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="1" Content="Aceptar" FontSize="14" Click="Accept_Click"/>
+    </Grid>
+</Window>
