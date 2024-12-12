@@ -62,7 +62,12 @@ namespace BebopTools
                     //Dictionary loaded
                     FileUploader fileUploader = new FileUploader(selectedPath);
                     Dictionary<string, string> parameterDictionary = fileUploader.GetInfo();
+                    foreach (ElementId elementId in modelElements)
+                    {
+                        parametersManager.AssociateParameters(elementId, parameterDictionary, selectedSourceParameter, selectedTargetParameter);
+                    }
 
+                    return Result.Succeeded;
                 }
                 else
                 {
@@ -78,12 +83,7 @@ namespace BebopTools
 
             //Iterate over the elements and fill the parameters
 
-            foreach (ElementId elementId in modelElements)
-            {
-                parametersManager.AssociateParameters(elementId,parameterDictionary, )
-            }
 
-            return Result.Succeeded;
         }
     }
 }
