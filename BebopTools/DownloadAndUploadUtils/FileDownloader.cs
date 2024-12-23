@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace BebopTools.DownloadUtils
+namespace BebopTools.DownloadAndUploadUtils
 {
     internal class FileDownloader
     {

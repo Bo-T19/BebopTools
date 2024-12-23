@@ -73,8 +73,10 @@
     <Compile Include="AssociateParameters.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="DownloadTemplates.cs" />
-    <Compile Include="DownloadUtils\FileDownloader.cs" />
+    <Compile Include="DownloadAndUploadUtils\FileDownloader.cs" />
     <Compile Include="FillParameters.cs" />
+    <Compile Include="GeometryUtils\QuantityCalculator.cs" />
+    <Compile Include="GeometryUtils\UnitConversor.cs" />
     <Compile Include="LevelsManager.cs" />
     <Compile Include="ParameterUtils\ParametersManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,8 +85,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="QuantityExtractor.cs" />
+    <Compile Include="SelectionUtils\LineSelector.cs" />
+    <Compile Include="SelectionUtils\SurfaceSelector.cs" />
     <Compile Include="SelectionUtils\ElementsSelector.cs" />
-    <Compile Include="UploadUtils\FileUploader.cs" />
+    <Compile Include="DownloadAndUploadUtils\FileUploader.cs" />
+    <Compile Include="SelectionUtils\VolumeSelector.cs" />
+    <Compile Include="WPF\ElementSelectorForQuantities.xaml.cs">
+      <DependentUpon>ElementSelectorForQuantities.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\FileSelectorForFillParams.xaml.cs">
       <DependentUpon>FileSelectorForFillParams.xaml</DependentUpon>
     </Compile>
@@ -93,6 +102,9 @@
     </Compile>
     <Compile Include="WPF\LevelSelector.xaml.cs">
       <DependentUpon>LevelSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\ElementSurfaceSelector.xaml.cs">
+      <DependentUpon>ElementSurfaceSelector.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +136,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="WPF\ElementSelectorForQuantities.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF\FileSelectorForFillParams.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\LevelSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\ElementSurfaceSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -86,7 +86,7 @@ namespace BebopTools
             PushButton bridgesPushButton = firstPanel.AddItem(bridgesPushButtonData) as PushButton;
             bridgesPushButton.Image = imageSourceBridges16;
             bridgesPushButton.LargeImage = imageSourceBridges32;
-
+            bridgesPushButton.ToolTip = "A tool that facilitates the modeling of bridges and other infrastructure elements using spreadsheets with spatial points.";
           
 
             //Second button: Families Add-in
@@ -108,6 +108,7 @@ namespace BebopTools
             PushButton familiesPushButton = firstPanel.AddItem(familiesPushButtonData) as PushButton;
             familiesPushButton.Image = imageSourceFamilies16;
             familiesPushButton.LargeImage = imageSourceFamilies32;
+            familiesPushButton.ToolTip = "A tool that helps you manage information about the Revit families and types present in the document.";
 
             
 
@@ -123,13 +124,14 @@ namespace BebopTools
 
             //Create the button data
             PushButtonData levelsPushButtonData = new PushButtonData("Levels",
-                                                     "Level \nmanager",
+                                                     "Level \nassigner",
                                                      Assembly.GetExecutingAssembly().Location,
                                                      "BebopTools.LevelsManager");
             //Add the button to the ribbon
             PushButton levelsPushButton = firstPanel.AddItem(levelsPushButtonData) as PushButton;
             levelsPushButton.Image = imageSourceLevels16;
             levelsPushButton.LargeImage = imageSourceLevels32;
+            levelsPushButton.ToolTip = "A tool for assigning the right level of the elements in the element to a parameter";
 
             
 
@@ -145,13 +147,14 @@ namespace BebopTools
 
             //Create the button data
             PushButtonData quantitiesPushButtonData = new PushButtonData("Quantities",
-                                                                 "Quantities \nmanager",
+                                                                 "Quantity  \nextractor",
                                                                  Assembly.GetExecutingAssembly().Location,
-                                                                 "BebopTools.Command");
+                                                                 "BebopTools.QuantityExtractor");
             //Add the button to the ribbon
             PushButton quantitiesPushButton = firstPanel.AddItem(quantitiesPushButtonData) as PushButton;
             quantitiesPushButton.Image = imageSourceQuantities16;
             quantitiesPushButton.LargeImage = imageSourceQuantities32;
+            quantitiesPushButton.ToolTip = "Useful tool for exctracting some quantities that Revit does not directly give";
 
 
             //Second Panel: Parameter Tools
@@ -168,13 +171,14 @@ namespace BebopTools
 
             //Create the button data
             PushButtonData parametersPushButtonData = new PushButtonData("Parameters",
-                                                                 "Parameters \nmanager",
+                                                                 "Bulk parameter\n filling",
                                                                  Assembly.GetExecutingAssembly().Location,
                                                                  "BebopTools.FillParameters");
             //Add the button to the ribbon
             PushButton parametersPushButton = secondPanel.AddItem(parametersPushButtonData) as PushButton;
             parametersPushButton.Image = imageSourceParameters16;
             parametersPushButton.LargeImage = imageSourceParameters32;
+            parametersPushButton.ToolTip = "Useful tool for assigning parameters to elements at scale given a spreadsheet with ElementId, Value pairs";
 
             //Second button: Associate parameters Add-in
 
@@ -195,7 +199,7 @@ namespace BebopTools
             PushButton associatePushButton = secondPanel.AddItem(associatePushButtonData) as PushButton;
             associatePushButton.Image = imageSourceAssociate16;
             associatePushButton.LargeImage = imageSourceAssociate32;
-
+            associatePushButton.ToolTip = "Useful tool for assigning parameters to elements at scale given a spreadsheet with Value1, Value2 pairs";
             //Third button: Download templates Add-in
 
             //Get the image for the button
@@ -215,6 +219,7 @@ namespace BebopTools
             PushButton downloadPushButton = secondPanel.AddItem(downloadPushButtonData) as PushButton;
             downloadPushButton.Image = imageSourceDownload16;
             downloadPushButton.LargeImage = imageSourceDownload32;
+            downloadPushButton.ToolTip = "Download the excel templates for the Parameter Manager and the Parameter Associator";
 
 
             return Result.Succeeded;

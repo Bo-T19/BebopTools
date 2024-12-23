@@ -27,9 +27,9 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition  Width="10"/>
@@ -39,7 +39,7 @@
                 <ColumnDefinition  Width="10"/>
             </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona el archivo de excel (NO PUEDE TENER PARES CLAVE-VALOR REPETIDOSS):" FontSize="14"/>
+        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona el archivo de excel (NO PUEDE TENER PARES CLAVE-VALOR REPETIDOS):" FontSize="14"/>
         <TextBox Name ="PathTextBox"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
         <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona el Project Parameter que vas a llenar masivamente:" FontSize="14"/>
         <ComboBox Grid.Row="7" Grid.Column="1"  Grid.ColumnSpan="3" Name="TargetParametersList" ItemsSource="{Binding ParameterNamesList}"/>

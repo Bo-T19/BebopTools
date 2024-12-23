@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace BebopTools.UploadUtils
+namespace BebopTools.DownloadAndUploadUtils
 {
     internal class FileUploader
     {
