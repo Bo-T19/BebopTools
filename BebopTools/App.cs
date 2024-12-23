@@ -125,7 +125,7 @@ namespace BebopTools
             PushButtonData levelsPushButtonData = new PushButtonData("Levels",
                                                      "Level \nmanager",
                                                      Assembly.GetExecutingAssembly().Location,
-                                                     "BebopTools.Command");
+                                                     "BebopTools.LevelsManager");
             //Add the button to the ribbon
             PushButton levelsPushButton = firstPanel.AddItem(levelsPushButtonData) as PushButton;
             levelsPushButton.Image = imageSourceLevels16;

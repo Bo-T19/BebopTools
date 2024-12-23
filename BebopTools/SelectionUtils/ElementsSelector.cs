@@ -7,9 +7,9 @@ using Autodesk.Revit.DB;
 
 namespace BebopTools.SelectionUtils
 {
-    internal class ElementsSelector
+    public class ElementsSelector
     {
-        private Document _doc; 
+        private Document _doc;
         private Categories _categories;
         private List<Category> _modelCategories = new List<Category>();
 
@@ -20,7 +20,7 @@ namespace BebopTools.SelectionUtils
             _categories = doc.Settings.Categories;
             foreach (Category category in _categories)
             {
-                if (category.CategoryType == CategoryType.Model) 
+                if (category.CategoryType == CategoryType.Model)
                 {
                     _modelCategories.Add(category);
                 }
@@ -39,14 +39,47 @@ namespace BebopTools.SelectionUtils
                                       .OfCategoryId(category.Id)
                                       .WhereElementIsNotElementType()
                                       .ToElementIds();
-            
-                modelElementsIds.AddRange(allElements); 
+
+                modelElementsIds.AddRange(allElements);
             }
 
             return modelElementsIds;
         }
 
-        //Method for getting all the model elements levels Ids
+        //Method for getting all the elements ids in the active view
 
+        public IEnumerable<ElementId> AllElementsInActiveView()
+        {
+
+            return new FilteredElementCollector(_doc, _doc.ActiveView.Id)
+                                      .WhereElementIsNotElementType()
+                                      .ToElementIds();
+        }
+
+        //Method for getting al the levels in the project
+        public List<string> AllLevelsInProject()
+        {
+            return new FilteredElementCollector(_doc)
+                .OfClass(typeof(Level))
+                .WhereElementIsNotElementType()
+                .ToElements()
+                .Select(level => level.Name)
+                .ToList();
+        }
+
+        //Method for getting a dicionary with the level Id and a the value of the elevation and the name. The dictionary is Sorted from the smallest elevation to the highest
+        public List<KeyValuePair<ElementId, (double Elevation, string Name)>> GetLevelsAndElevationsOrdered()
+        {
+            return new FilteredElementCollector(_doc)
+                .OfClass(typeof(Level))
+                .WhereElementIsNotElementType()
+                .Cast<Level>()
+                .ToDictionary(
+                    level => level.Id,
+                    level => (level.Elevation, level.Name)
+                )
+                .OrderBy(pair => pair.Value.Elevation)
+                .ToList();
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace BebopTools
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("Error", $"An error ocurred{ex.ToString()}");
+                TaskDialog.Show("Error", $"An error of type {ex.GetType()} ocurred {ex.ToString()}");
                 return Result.Failed;
             }
         }

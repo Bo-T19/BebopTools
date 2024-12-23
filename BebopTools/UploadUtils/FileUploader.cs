@@ -27,7 +27,7 @@ namespace BebopTools.UploadUtils
         {
             List < List<string> > resultList = new List<List<string>>();
 
-
+            //Uploading the excel data to the program, creating a list of string pairs
             using (SpreadsheetDocument document = SpreadsheetDocument.Open(_filePath, false))
             {
 
@@ -43,7 +43,7 @@ namespace BebopTools.UploadUtils
 
                     if (rowIndex < 2)
                     {
-                        continue;  // Start at row 4
+                        continue;  // Start at row 2
                     }
 
                     List<string> items = new List<string>();
@@ -69,8 +69,20 @@ namespace BebopTools.UploadUtils
 
             }
 
-            Dictionary<string, string> resultDictionary = resultList.ToDictionary(item => item[0], item => item[1]);
+            //Convert the list to a dictionary
+            Dictionary<string, string> resultDictionary = new Dictionary<string, string>();
 
+            foreach (var item in resultList)
+            {
+                string key = item[0];
+                string value = item[1];
+
+                if (!resultDictionary.ContainsKey(key))
+                {
+                    resultDictionary[key] = value; 
+                }
+
+            }
             return resultDictionary;
         }
 

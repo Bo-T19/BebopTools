@@ -75,6 +75,7 @@
     <Compile Include="DownloadTemplates.cs" />
     <Compile Include="DownloadUtils\FileDownloader.cs" />
     <Compile Include="FillParameters.cs" />
+    <Compile Include="LevelsManager.cs" />
     <Compile Include="ParameterUtils\ParametersManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -89,6 +90,9 @@
     </Compile>
     <Compile Include="WPF\FileSelectorForAssociateParams.xaml.cs">
       <DependentUpon>FileSelectorForAssociateParams.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\LevelSelector.xaml.cs">
+      <DependentUpon>LevelSelector.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\FileSelectorForAssociateParams.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\LevelSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

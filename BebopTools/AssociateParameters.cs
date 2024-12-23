@@ -50,7 +50,7 @@ namespace BebopTools
 
             //Get all the model elements
             ElementsSelector elementSelector = new ElementsSelector(doc);
-            IEnumerable<ElementId> modelElements = elementSelector.GetModelElementsInstances();
+            IEnumerable<ElementId> elementIds = elementSelector.AllElementsInActiveView();
 
             //Try to handle the scenario where there is no path and no parameters
             try
@@ -62,10 +62,7 @@ namespace BebopTools
                     //Dictionary loaded
                     FileUploader fileUploader = new FileUploader(selectedPath);
                     Dictionary<string, string> parameterDictionary = fileUploader.GetInfo();
-                    foreach (ElementId elementId in modelElements)
-                    {
-                        parametersManager.AssociateParameters(elementId, parameterDictionary, selectedSourceParameter, selectedTargetParameter);
-                    }
+                    parametersManager.AssociateParameters(elementIds, parameterDictionary, selectedSourceParameter, selectedTargetParameter);
 
                     return Result.Succeeded;
                 }
