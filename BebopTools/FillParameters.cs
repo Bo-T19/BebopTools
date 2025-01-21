@@ -17,7 +17,7 @@ using System.Windows.Controls.Primitives;
 namespace BebopTools
 {
 
-    //PRoblemas: no está leyendo bien la hoja de excel, no está trayendo los element ids como element ids
+    //Problemas: no está leyendo bien la hoja de excel, no está trayendo los element ids como element ids
     [Transaction(TransactionMode.Manual)]
     public class FillParameters : IExternalCommand
     {

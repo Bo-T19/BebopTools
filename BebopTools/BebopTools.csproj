@@ -72,6 +72,7 @@
     <Compile Include="App.cs" />
     <Compile Include="AssociateParameters.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="Detacher.cs" />
     <Compile Include="DownloadTemplates.cs" />
     <Compile Include="DownloadAndUploadUtils\FileDownloader.cs" />
     <Compile Include="FillParameters.cs" />
@@ -100,6 +101,9 @@
     <Compile Include="WPF\FileSelectorForAssociateParams.xaml.cs">
       <DependentUpon>FileSelectorForAssociateParams.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\FolderSelector.xaml.cs">
+      <DependentUpon>FolderSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\LevelSelector.xaml.cs">
       <DependentUpon>LevelSelector.xaml</DependentUpon>
     </Compile>
@@ -109,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BebopTools.addin" />
+    <None Include="Resources\Chains16.png" />
+    <None Include="Resources\Chains32.png" />
     <EmbeddedResource Include="Resources\Associate32.png" />
     <EmbeddedResource Include="Resources\Associate16.png" />
     <EmbeddedResource Include="Resources\AssociateParameters.xlsx" />
@@ -145,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\FileSelectorForAssociateParams.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\FolderSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

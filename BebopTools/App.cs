@@ -156,6 +156,26 @@ namespace BebopTools
             quantitiesPushButton.LargeImage = imageSourceQuantities32;
             quantitiesPushButton.ToolTip = "Useful tool for exctracting some quantities that Revit does not directly give";
 
+            //Fifth button: Detacher Add-in
+
+            //Get the image for the button
+            Image chains16 = Properties.Resources.Chains16;
+            ImageSource imageSourceChains16 = GetImageSource(chains16);
+
+
+            Image chains32 = Properties.Resources.Chains32;
+            ImageSource imageSourceChains32 = GetImageSource(chains32);
+
+            //Create the button data
+            PushButtonData chainsPushButtonData = new PushButtonData("Detacher",
+                                                                 "Detacher",
+                                                                 Assembly.GetExecutingAssembly().Location,
+                                                                 "BebopTools.Detacher");
+            //Add the button to the ribbon
+            PushButton chainsPushButton = firstPanel.AddItem(chainsPushButtonData) as PushButton;
+            chainsPushButton.Image = imageSourceChains16;
+            chainsPushButton.LargeImage = imageSourceChains32;
+            chainsPushButton.ToolTip = "Useful tool for detaching cloud Revit Models";
 
             //Second Panel: Parameter Tools
 
