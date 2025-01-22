@@ -30,7 +30,7 @@
 
         <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="Por favor selecciona la carpeta en la que quieres guardar el modelo:" FontSize="14"/>
         <TextBox Name ="PathTextBox"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" />
-        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="1" Content="Seleccionar archivo" FontSize="14" Click="Select_Click"/>
+        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="1" Content="Seleccionar carpeta" FontSize="14" Click="Select_Click"/>
         <Button Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="1" Content="Aceptar" FontSize="14" Click="Accept_Click"/>
     </Grid>
 </Window>
