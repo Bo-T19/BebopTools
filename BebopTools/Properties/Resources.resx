@@ -139,6 +139,12 @@
   <data name="Chains32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Chains32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Dimensions16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dimensions16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dimensions32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dimensions32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Download16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Download16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

@@ -22,6 +22,7 @@ namespace BebopTools
         const string RIBBON_TAB = "Be-bop Tools";
         const string FIRST_RIBBON_PANEL = "GeneralTools";
         const string SECOND_RIBBON_PANEL = "ParameterTools";
+        const string THIRD_RIBBON_PANEL = "ModelTools";
         public Result OnStartup(UIControlledApplication a)
         {
             //Create the ribbon tab
@@ -38,6 +39,8 @@ namespace BebopTools
             //Create the panels
             RibbonPanel firstPanel = null;
             RibbonPanel secondPanel = null;
+            RibbonPanel thirdPanel = null;
+
             List<RibbonPanel> panels = a.GetRibbonPanels(RIBBON_TAB);
             foreach (RibbonPanel ribbonPanel in panels)
             {
@@ -48,6 +51,10 @@ namespace BebopTools
                 else if (ribbonPanel.Name == SECOND_RIBBON_PANEL)
                 {
                     secondPanel = ribbonPanel;
+                }
+                else if (ribbonPanel.Name == THIRD_RIBBON_PANEL)
+                {
+                    thirdPanel = ribbonPanel;
                 }
             }
 
@@ -64,6 +71,10 @@ namespace BebopTools
                 secondPanel = a.CreateRibbonPanel(RIBBON_TAB, SECOND_RIBBON_PANEL);
             }
 
+            if (thirdPanel == null)
+            {
+                thirdPanel = a.CreateRibbonPanel(RIBBON_TAB, THIRD_RIBBON_PANEL);
+            }
 
             //First Panel : General Tools
             
@@ -241,9 +252,35 @@ namespace BebopTools
             downloadPushButton.LargeImage = imageSourceDownload32;
             downloadPushButton.ToolTip = "Download the excel templates for the Parameter Manager and the Parameter Associator";
 
+            //Third Panel : Model Tools
+
+            //First button: Auto-dimensions Add-in
+            //Get the image for the button
+
+            Image dimensions16 = Properties.Resources.Dimensions16;
+            ImageSource imageSourceDimensions16 = GetImageSource(dimensions16);
+
+
+            Image dimensions32 = Properties.Resources.Dimensions32;
+            ImageSource imageSourceDimensions32 = GetImageSource(dimensions32);
+
+            //Create the button data
+            PushButtonData dimensionsPushButtonData = new PushButtonData("Dimensions",
+                                                                 "Auto \ndimensions",
+                                                                 Assembly.GetExecutingAssembly().Location,
+                                                                 "BebopTools.Dimensions");
+            //Add the button to the ribbon
+            PushButton dimensionsPushButton = thirdPanel.AddItem(dimensionsPushButtonData) as PushButton;
+            dimensionsPushButton.Image = imageSourceDimensions16;
+            dimensionsPushButton.LargeImage = imageSourceDimensions32;
+            dimensionsPushButton.ToolTip = "Useful tool for creating dimensions automatically in your plans";
 
             return Result.Succeeded;
+
         }
+
+
+
 
         public Result OnShutdown(UIControlledApplication a)
         {

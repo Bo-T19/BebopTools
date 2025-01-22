@@ -73,12 +73,14 @@
     <Compile Include="AssociateParameters.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Detacher.cs" />
+    <Compile Include="Dimensions.cs" />
     <Compile Include="DownloadTemplates.cs" />
     <Compile Include="DownloadAndUploadUtils\FileDownloader.cs" />
     <Compile Include="FillParameters.cs" />
     <Compile Include="GeometryUtils\QuantityCalculator.cs" />
     <Compile Include="GeometryUtils\UnitConversor.cs" />
     <Compile Include="LevelsManager.cs" />
+    <Compile Include="ModelUtils\AnnotationsGenerator.cs" />
     <Compile Include="ParameterUtils\ParametersManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -113,6 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BebopTools.addin" />
+    <None Include="Resources\Dimensions32.png" />
+    <None Include="Resources\Dimensions16.png" />
     <None Include="Resources\Chains16.png" />
     <None Include="Resources\Chains32.png" />
     <EmbeddedResource Include="Resources\Associate32.png" />

@@ -33,7 +33,7 @@ namespace BebopTools.SelectionUtils
 
             bool superiorFaces = _selectedSurfaces.Contains("Superiores") && (geometryObject.FaceNormal.Z == 1);
             bool inferiorFaces = _selectedSurfaces.Contains("Inferiores") && (geometryObject.FaceNormal.Z == -1);
-            bool lateralFaces = _selectedSurfaces.Contains("Laterales") && (geometryObject.FaceNormal.Z != 1 && geometryObject.FaceNormal.Z != -1);
+            bool lateralFaces = _selectedSurfaces.Contains("Laterales") && (geometryObject.FaceNormal.Z != 1 && geometryObject.FaceNormal.Z != -1 && Math.Sqrt((Math.Pow((geometryObject.FaceNormal.X),2) + Math.Pow((geometryObject.FaceNormal.Y),2)))==1);
 
             return superiorFaces || inferiorFaces || lateralFaces;
         }

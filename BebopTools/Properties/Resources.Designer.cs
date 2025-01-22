@@ -133,6 +133,26 @@ namespace BebopTools.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Dimensions16 {
+            get {
+                object obj = ResourceManager.GetObject("Dimensions16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dimensions32 {
+            get {
+                object obj = ResourceManager.GetObject("Dimensions32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Download16 {
             get {
                 object obj = ResourceManager.GetObject("Download16", resourceCulture);
