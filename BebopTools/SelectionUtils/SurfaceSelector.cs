@@ -31,8 +31,8 @@ namespace BebopTools.SelectionUtils
             var element = _doc.GetElement(reference.ElementId);
             var geometryObject = element.GetGeometryObjectFromReference(reference) as PlanarFace;
 
-            bool superiorFaces = _selectedSurfaces.Contains("Superiores") && (geometryObject.FaceNormal.Z == 1);
-            bool inferiorFaces = _selectedSurfaces.Contains("Inferiores") && (geometryObject.FaceNormal.Z == -1);
+            bool superiorFaces = _selectedSurfaces.Contains("Superiores") && (geometryObject.FaceNormal.IsAlmostEqualTo(XYZ.BasisZ));
+            bool inferiorFaces = _selectedSurfaces.Contains("Inferiores") && (geometryObject.FaceNormal.IsAlmostEqualTo(-XYZ.BasisZ));
             bool lateralFaces = _selectedSurfaces.Contains("Laterales") && (geometryObject.FaceNormal.Z != 1 && geometryObject.FaceNormal.Z != -1 && Math.Sqrt((Math.Pow((geometryObject.FaceNormal.X),2) + Math.Pow((geometryObject.FaceNormal.Y),2)))==1);
 
             return superiorFaces || inferiorFaces || lateralFaces;
