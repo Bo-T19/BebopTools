@@ -268,7 +268,7 @@ namespace BebopTools
             PushButtonData dimensionsPushButtonData = new PushButtonData("Dimensions",
                                                                  "Auto \ndimensions",
                                                                  Assembly.GetExecutingAssembly().Location,
-                                                                 "BebopTools.Dimensions");
+                                                                 "BebopTools.DimensionsV2");
             //Add the button to the ribbon
             PushButton dimensionsPushButton = thirdPanel.AddItem(dimensionsPushButtonData) as PushButton;
             dimensionsPushButton.Image = imageSourceDimensions16;

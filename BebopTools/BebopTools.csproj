@@ -74,6 +74,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Detacher.cs" />
     <Compile Include="Dimensions.cs" />
+    <Compile Include="DimensionsV2.cs" />
     <Compile Include="DownloadTemplates.cs" />
     <Compile Include="DownloadAndUploadUtils\FileDownloader.cs" />
     <Compile Include="FillParameters.cs" />

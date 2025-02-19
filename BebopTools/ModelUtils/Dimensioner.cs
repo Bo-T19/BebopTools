@@ -8,6 +8,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using BebopTools.SelectionUtils;
 
+
 namespace BebopTools.ModelUtils
 {
     internal class Dimensioner
@@ -20,7 +21,7 @@ namespace BebopTools.ModelUtils
         public Dimensioner(Document document, View activeView)
         {
             _activeView = activeView;
-           _document = document;
+            _document = document;
         }
 
         //Method for putting all the dimensions for the walls in a floor plan, it asks the user if 
@@ -96,9 +97,10 @@ namespace BebopTools.ModelUtils
                         }
 
                         //Create the dimension line for the width of the wall, this is my own development
-                        if (includeDimensionWidths) {
+                        if (includeDimensionWidths)
+                        {
 
-                            
+
                             PlanarFace firstSuperiorFace = wallSuperiorFaces[0];
                             EdgeArrayArray firstSuperiorFaceEdgeArrays = firstSuperiorFace.EdgeLoops;
                             EdgeArray firstSuperiorFaceEdges = firstSuperiorFaceEdgeArrays.get_Item(0);
@@ -339,6 +341,189 @@ namespace BebopTools.ModelUtils
             }
             return indexRef;
         }
+
+
+        //Method for putting all the dimensions for the walls, stairs, columns, beams and floors. Include wall widths if necessary
+        public void DimensionElements(bool includeDimensionWidth)
+        {
+            // List of lines
+            List<EdgeArray> elementEdges = new List<EdgeArray>();
+
+			// Get all the elements filters
+			ElementCategoryFilter wallFilter = new ElementCategoryFilter(BuiltInCategory.OST_Walls);
+			ElementCategoryFilter stairFilter = new ElementCategoryFilter(BuiltInCategory.OST_Stairs);
+			ElementCategoryFilter columnFilter = new ElementCategoryFilter(BuiltInCategory.OST_Columns);
+			ElementCategoryFilter structuralColumnFilter = new ElementCategoryFilter(BuiltInCategory.OST_StructuralColumns);
+			ElementCategoryFilter beamFilter = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFraming);
+			ElementCategoryFilter beamFilter2 = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFramingOther);
+			ElementCategoryFilter beamFilter3 = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFramingSystem);
+			ElementCategoryFilter floorFilter = new ElementCategoryFilter(BuiltInCategory.OST_Floors);
+
+			// Combine the filters using a LogicalOrFilter
+			LogicalOrFilter combinedFilter = new LogicalOrFilter(new List<ElementFilter> {
+                wallFilter,
+                stairFilter,
+                columnFilter,
+                structuralColumnFilter,
+                beamFilter,
+				beamFilter2,
+				beamFilter3,
+				floorFilter
+            });
+
+            // Get the element IDs
+            List<ElementId> elementIds = new FilteredElementCollector(_document, _activeView.Id)
+                .WherePasses(combinedFilter)
+                .WhereElementIsNotElementType()
+                .ToElementIds()
+                .ToList();
+
+            //Get the reference planes
+            ReferencePlane referencePlane = new FilteredElementCollector(_document, _activeView.Id)
+            .OfClass(typeof(ReferencePlane))
+            .WhereElementIsNotElementType()
+            .Cast<ReferencePlane>()
+            .FirstOrDefault();
+
+            //Get the reference face
+            PlanarFace referenceFace = GetPlanarFaceFromReferencePlane(referencePlane);
+
+
+            // Surface selector
+            List<string> selectedSuperiorSurfaces = new List<string> { "Laterales"};
+            SurfaceSelector superiorSurfaceSelector = new SurfaceSelector(selectedSuperiorSurfaces, _document);
+
+            // Options for geometry extraction
+            Options options = new Options
+            {
+                ComputeReferences = true,
+                IncludeNonVisibleObjects = false
+            };
+
+            int solidCount = 0;
+            int superiorFaceCount = 0;
+
+            // Iterate each element and get the superior surfaces
+            foreach (ElementId elementId in elementIds)
+            {
+                Element element = _document.GetElement(elementId);
+                GeometryElement geometry = element.get_Geometry(options);
+
+                if (geometry == null) continue;
+
+                foreach (var geomObj in geometry)
+                {
+                    if (geomObj is Solid solid && solid.Volume > 0)
+                    {
+                        solidCount++;
+
+                        foreach (Face face in solid.Faces)
+                        {
+                            superiorFaceCount++;
+
+                            if (face is PlanarFace planarFace && planarFace.Reference != null &&
+                                superiorSurfaceSelector.AllowReference(planarFace.Reference, planarFace.Origin))
+                            {
+    
+
+                                    elementEdges.Add(face.EdgeLoops.get_Item(0));
+								
+                            }
+                        }
+                    }
+                }
+            }
+
+            Dictionary<Reference, XYZ> curveIntersectionsDictionary = new Dictionary<Reference, XYZ>();
+
+			foreach (EdgeArray edges in elementEdges)
+            {              
+                // Verificar si la curva intersecta el plano
+                IntersectionResultArray intersectionResults;
+
+                foreach(Edge edge in edges)
+                {
+					SetComparisonResult result = referenceFace.Intersect(edge.AsCurve(), out intersectionResults);
+					// Si hay intersección, agregar la curva a la lista
+					if (result == SetComparisonResult.Overlap && intersectionResults != null && intersectionResults.Size > 0)
+					{
+						foreach (IntersectionResult res in intersectionResults)
+						{
+                            curveIntersectionsDictionary.Add(edge.Reference, res.XYZPoint);
+						}
+						break;
+					}
+				}
+            }
+
+			List<KeyValuePair<Reference, XYZ>> sortedIntersections = curveIntersectionsDictionary
+				.OrderBy(p => p.Value.X)
+				.ThenBy(p => p.Value.Y)
+				.ToList();
+			Level level = _document.GetElement(_activeView.GenLevel.Id) as Level;
+			double elevation = level.Elevation;
+
+			if (sortedIntersections.Count < 2)
+			{
+				TaskDialog.Show("Error", "No hay suficientes intersecciones para crear dimensiones.");
+				return;
+			}
+
+
+
+			using (Transaction trans = new Transaction(_document, "Create Dimensions"))
+			{
+				trans.Start();
+
+				// Obtener la vista activa donde se colocarán las dimensiones
+				View view = _document.ActiveView;
+
+				// Crear las dimensiones entre cada par de puntos consecutivos
+				for (int i = 0; i < sortedIntersections.Count - 1; i++)
+				{
+                    try
+                    {
+                        XYZ point1 = new XYZ(sortedIntersections[i].Value.X, sortedIntersections[i].Value.Y, elevation);
+                        XYZ point2 = new XYZ(sortedIntersections[i + 1].Value.X, sortedIntersections[i + 1].Value.Y, elevation);
+
+                        // Crear una línea de referencia entre los dos puntos
+                        Line dimensionLine = Line.CreateBound(point1, point2);
+
+                        // Obtener referencias de las curvas
+                        Reference ref1 = sortedIntersections[i].Key;
+                        Reference ref2 = sortedIntersections[i + 1].Key;
+
+                        if (ref1 != null && ref2 != null)
+                        {
+                            ReferenceArray references = new ReferenceArray();
+                            references.Append(ref1);
+                            references.Append(ref2);
+
+                            // Crear la dimensión en la vista actual
+                            Dimension dimension = _document.Create.NewDimension(view, dimensionLine, references);
+                        }
+                    }
+                    catch (Exception ex) { }
+
+				}
+
+				trans.Commit();
+			}
+
+
+
+			// Show the results in a TaskDialog
+			TaskDialog.Show("Resultado del Filtro",
+                $"Se encontraron {elementIds.Count} elementos que pertenecen a las categorías seleccionadas:\n" +
+                "- Muros (Walls)\n" +
+                "- Escaleras (Stairs)\n" +
+                "- Columnas (Columns)\n" +
+                "- Columnas Estructurales (Structural Columns)\n" +
+                "- Vigas (Structural Framing)\n" +
+                "- Pisos (Floors)\n" +
+                $"Se encontraron {solidCount} sólidos, {superiorFaceCount} caras superiores y {sortedIntersections.Count} curvas que intersectan.");
+        }
+
         private XYZ GetOffsetByWallOrientation(XYZ point, XYZ orientation, int value)
         {
             XYZ newVector = orientation.Multiply(value);
@@ -346,6 +531,69 @@ namespace BebopTools.ModelUtils
 
             return returnPoint;
         }
-    
-}
+
+
+
+        // Method for generating a planar face given a reference plane
+        private PlanarFace GetPlanarFaceFromReferencePlane(ReferencePlane referencePlane)
+        {
+            XYZ origin = referencePlane.BubbleEnd;
+            XYZ end = referencePlane.FreeEnd;
+            XYZ normal = referencePlane.Normal; // Normal vector
+
+            // Get the direction of the ReferencePlane
+            XYZ direction = (end - origin).Normalize();
+
+            // Get the actual length of the ReferencePlane
+            double length = origin.DistanceTo(end);
+
+            // Assume a standard height (Revit does not directly provide a "height" for the ReferencePlane)
+            double height = 200; // You can adjust this according to the project's scale
+
+            // Calculate the points of a rectangle on the ReferencePlane
+            XYZ p1 = origin + new XYZ(0, 0, height);
+            XYZ p2 = origin + new XYZ(0, 0, 0);
+            XYZ p3 = p2 + length * direction;
+            XYZ p4 = p1 + length * direction;
+
+            // Create a rectangular profile
+            CurveLoop profile = new CurveLoop();
+            profile.Append(Line.CreateBound(p1, p2));
+            profile.Append(Line.CreateBound(p2, p3));
+            profile.Append(Line.CreateBound(p3, p4));
+            profile.Append(Line.CreateBound(p4, p1));
+
+            // Create an extruded solid with a small depth
+            Solid solid = GeometryCreationUtilities.CreateExtrusionGeometry(new List<CurveLoop> { profile }, normal, 0.1);
+
+            // Get the face that matches the ReferencePlane
+            foreach (Face face in solid.Faces)
+            {
+                if (face is PlanarFace planarFace && planarFace.FaceNormal.IsAlmostEqualTo(normal))
+                {
+					using (Transaction trans = new Transaction(_document, "Create DirectShape"))
+					{
+						trans.Start();
+
+						// Crear un tipo de categoría para el DirectShape
+						Category category = _document.Settings.Categories.get_Item(BuiltInCategory.OST_GenericModel);
+						ElementId categoryId = category.Id;
+
+
+						// Crear un DirectShape con la geometría
+						DirectShape ds = DirectShape.CreateElement(_document, categoryId);
+						ds.SetShape(new List<GeometryObject> { solid });
+
+						trans.Commit();
+					}
+					return planarFace;
+                }
+            }
+
+            return null;
+        }
+
+
+
+	}
 }
