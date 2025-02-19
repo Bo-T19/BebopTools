@@ -49,7 +49,7 @@ namespace BebopTools
             }
 
             //Get all the model elements
-            ElementsSelector elementSelector = new ElementsSelector(doc);
+            ElementsSelectionTools elementSelector = new ElementsSelectionTools(doc);
             IEnumerable<ElementId> elementIds = elementSelector.AllElementsInActiveView();
 
             //Try to handle the scenario where there is no path and no parameters

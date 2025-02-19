@@ -7,14 +7,14 @@ using Autodesk.Revit.DB;
 
 namespace BebopTools.SelectionUtils
 {
-    public class ElementsSelector
+    public class ElementsSelectionTools
     {
         private Document _doc;
         private Categories _categories;
         private List<Category> _modelCategories = new List<Category>();
 
         //Constructror which takes the document and filters just the model categories
-        public ElementsSelector(Document doc)
+        public ElementsSelectionTools(Document doc)
         {
             _doc = doc;
             _categories = doc.Settings.Categories;
@@ -81,5 +81,7 @@ namespace BebopTools.SelectionUtils
                 .OrderBy(pair => pair.Value.Elevation)
                 .ToList();
         }
+
+
     }
 }

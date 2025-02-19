@@ -30,7 +30,7 @@ namespace BebopTools
             string levelAssociationOption = "";
 
             //Create the ElementsSelector to get the levels and the ParametersManager to get the parameters
-            ElementsSelector elementsSelector = new ElementsSelector(doc);
+            ElementsSelectionTools elementsSelector = new ElementsSelectionTools(doc);
             ParametersManager parametersManager = new ParametersManager(doc);
 
 

@@ -23,7 +23,7 @@ namespace BebopTools.WPF
     public partial class LevelSelector : Window
     {
 
-        private ElementsSelector _elementsSelector;
+        private ElementsSelectionTools _elementsSelector;
         private ParametersManager _parametersManager;
         public List<string> LevelsNamesList { get; set; }
         public List<string> ParameterNamesList { get; set; }
@@ -32,7 +32,7 @@ namespace BebopTools.WPF
         public string SelectionOption { get; set; }
 
 
-        public LevelSelector(ElementsSelector elementsSelector, ParametersManager parametersManager)
+        public LevelSelector(ElementsSelectionTools elementsSelector, ParametersManager parametersManager)
         {
             InitializeComponent();
             _elementsSelector = elementsSelector;

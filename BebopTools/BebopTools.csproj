@@ -80,7 +80,7 @@
     <Compile Include="GeometryUtils\QuantityCalculator.cs" />
     <Compile Include="GeometryUtils\UnitConversor.cs" />
     <Compile Include="LevelsManager.cs" />
-    <Compile Include="ModelUtils\AnnotationsGenerator.cs" />
+    <Compile Include="ModelUtils\Dimensioner.cs" />
     <Compile Include="ParameterUtils\ParametersManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -90,10 +90,14 @@
     </Compile>
     <Compile Include="QuantityExtractor.cs" />
     <Compile Include="SelectionUtils\LineSelector.cs" />
+    <Compile Include="SelectionUtils\SelectorFromCategory.cs" />
     <Compile Include="SelectionUtils\SurfaceSelector.cs" />
-    <Compile Include="SelectionUtils\ElementsSelector.cs" />
+    <Compile Include="SelectionUtils\ElementsSelectionTools.cs" />
     <Compile Include="DownloadAndUploadUtils\FileUploader.cs" />
     <Compile Include="SelectionUtils\VolumeSelector.cs" />
+    <Compile Include="WPF\DimensionerWPFs\WallDimensionerOptions.xaml.cs">
+      <DependentUpon>WallDimensionerOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\ElementSelectorForQuantities.xaml.cs">
       <DependentUpon>ElementSelectorForQuantities.xaml</DependentUpon>
     </Compile>
@@ -146,6 +150,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="WPF\DimensionerWPFs\WallDimensionerOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF\ElementSelectorForQuantities.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
