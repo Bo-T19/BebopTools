@@ -357,7 +357,7 @@ namespace BebopTools.ModelUtils
 			ElementCategoryFilter beamFilter = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFraming);
 			ElementCategoryFilter beamFilter2 = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFramingOther);
 			ElementCategoryFilter beamFilter3 = new ElementCategoryFilter(BuiltInCategory.OST_StructuralFramingSystem);
-			ElementCategoryFilter floorFilter = new ElementCategoryFilter(BuiltInCategory.OST_Floors);
+			//ElementCategoryFilter floorFilter = new ElementCategoryFilter(BuiltInCategory.OST_Floors);
 
 			// Combine the filters using a LogicalOrFilter
 			LogicalOrFilter combinedFilter = new LogicalOrFilter(new List<ElementFilter> {
@@ -368,7 +368,7 @@ namespace BebopTools.ModelUtils
                 beamFilter,
 				beamFilter2,
 				beamFilter3,
-				floorFilter
+				//floorFilter
             });
 
             // Get the element IDs
@@ -387,7 +387,7 @@ namespace BebopTools.ModelUtils
 
             //Get the reference face
             PlanarFace referenceFace = GetPlanarFaceFromReferencePlane(referencePlane);
-
+            
 
             // Surface selector
             List<string> selectedSuperiorSurfaces = new List<string> { "Laterales"};
@@ -435,33 +435,49 @@ namespace BebopTools.ModelUtils
             }
 
             Dictionary<Reference, XYZ> curveIntersectionsDictionary = new Dictionary<Reference, XYZ>();
+            using (Transaction trans = new Transaction(_document, "Create Dimensions"))
+            {
+                trans.Start();
 
-			foreach (EdgeArray edges in elementEdges)
-            {              
-                // Verificar si la curva intersecta el plano
-                IntersectionResultArray intersectionResults;
+				Category category = _document.Settings.Categories.get_Item(BuiltInCategory.OST_GenericModel);
+				ElementId categoryId = category.Id;
 
-                foreach(Edge edge in edges)
+
+
+				foreach (EdgeArray edges in elementEdges)
                 {
-					SetComparisonResult result = referenceFace.Intersect(edge.AsCurve(), out intersectionResults);
-					// Si hay intersección, agregar la curva a la lista
-					if (result == SetComparisonResult.Overlap && intersectionResults != null && intersectionResults.Size > 0)
-					{
-						foreach (IntersectionResult res in intersectionResults)
-						{
-                            curveIntersectionsDictionary.Add(edge.Reference, res.XYZPoint);
-						}
-						break;
-					}
-				}
+                    // Verificar si la curva intersecta el plano
+                    IntersectionResultArray intersectionResults;
+
+                    foreach (Edge edge in edges)
+                    {
+
+                        SetComparisonResult result = referenceFace.Intersect(edge.AsCurve(), out intersectionResults);
+                        // Si hay intersección, agregar la curva a la lista
+                        if (result == SetComparisonResult.Overlap && intersectionResults != null && intersectionResults.Size > 0)
+                        {
+							// Crear un DirectShape con la geometría
+							DirectShape ds = DirectShape.CreateElement(_document, categoryId);
+							ds.SetShape(new List<GeometryObject> { edge.AsCurve() });
+							foreach (IntersectionResult res in intersectionResults)
+                            {
+                                curveIntersectionsDictionary.Add(edge.Reference, res.XYZPoint);
+                            }
+                            break;
+                        }
+                    }
+                }
+                trans.Commit();
             }
 
 			List<KeyValuePair<Reference, XYZ>> sortedIntersections = curveIntersectionsDictionary
 				.OrderBy(p => p.Value.X)
 				.ThenBy(p => p.Value.Y)
 				.ToList();
-			Level level = _document.GetElement(_activeView.GenLevel.Id) as Level;
-			double elevation = level.Elevation;
+
+			List<KeyValuePair<Reference, XYZ>> sortedIntersectionsElevations = curveIntersectionsDictionary
+				.OrderByDescending(p => p.Value.Z)
+				.ToList();
 
 			if (sortedIntersections.Count < 2)
 			{
@@ -471,43 +487,54 @@ namespace BebopTools.ModelUtils
 
 
 
-			using (Transaction trans = new Transaction(_document, "Create Dimensions"))
-			{
-				trans.Start();
+			Level level = _document.GetElement(_activeView.GenLevel.Id) as Level;
 
-				// Obtener la vista activa donde se colocarán las dimensiones
-				View view = _document.ActiveView;
+            // Obtener la vista activa donde se colocarán las dimensiones
+            double elevation = sortedIntersectionsElevations.Last().Value.Z+1;
+			Plane plane = Plane.CreateByNormalAndOrigin(XYZ.BasisZ, new XYZ(0, 0, elevation));
 
-				// Crear las dimensiones entre cada par de puntos consecutivos
-				for (int i = 0; i < sortedIntersections.Count - 1; i++)
+			// Crear las dimensiones entre cada par de puntos consecutivos
+			for (int i = 0; i < sortedIntersections.Count - 1; i++)
 				{
-                    try
+				using (Transaction trans = new Transaction(_document, "Create Dimensions"))
+				{
+					trans.Start();
+					try
                     {
-                        XYZ point1 = new XYZ(sortedIntersections[i].Value.X, sortedIntersections[i].Value.Y, elevation);
+						SketchPlane sketchPlane = SketchPlane.Create(_document, plane);
+						XYZ point1 = new XYZ(sortedIntersections[i].Value.X, sortedIntersections[i].Value.Y, elevation);
                         XYZ point2 = new XYZ(sortedIntersections[i + 1].Value.X, sortedIntersections[i + 1].Value.Y, elevation);
 
                         // Crear una línea de referencia entre los dos puntos
                         Line dimensionLine = Line.CreateBound(point1, point2);
+                        ModelLine modelLine = _document.Create.NewModelCurve(dimensionLine, sketchPlane) as ModelLine;
 
-                        // Obtener referencias de las curvas
-                        Reference ref1 = sortedIntersections[i].Key;
-                        Reference ref2 = sortedIntersections[i + 1].Key;
+						// Obtener referencias de las curvas
+						Reference ref1 = modelLine.GeometryCurve.GetEndPointReference(0);
+                        Reference ref2 = modelLine.GeometryCurve.GetEndPointReference(1);
 
-                        if (ref1 != null && ref2 != null)
+
+						if (ref1 != null && ref2 != null)
                         {
                             ReferenceArray references = new ReferenceArray();
                             references.Append(ref1);
                             references.Append(ref2);
+							DirectShape ds = DirectShape.CreateElement(_document, _document.Settings.Categories.get_Item(BuiltInCategory.OST_GenericModel).Id);
+							ds.SetShape(new List<GeometryObject> { dimensionLine });
+							// Crear la dimensión en la vista actual
+							Dimension dimension = _document.Create.NewDimension(_activeView, dimensionLine, references);
 
-                            // Crear la dimensión en la vista actual
-                            Dimension dimension = _document.Create.NewDimension(view, dimensionLine, references);
-                        }
+							TaskDialog.Show("Resultado del Filtro", $"{dimension.Id}, {modelLine.Id}");
+						}
                     }
-                    catch (Exception ex) { }
+                    catch (Exception ex) {
+                        TaskDialog.Show("Error", $"{ex.Message}");
 
+					}
+					trans.Commit();
 				}
 
-				trans.Commit();
+
 			}
 
 
@@ -548,7 +575,7 @@ namespace BebopTools.ModelUtils
             double length = origin.DistanceTo(end);
 
             // Assume a standard height (Revit does not directly provide a "height" for the ReferencePlane)
-            double height = 200; // You can adjust this according to the project's scale
+            double height = 400; // You can adjust this according to the project's scale
 
             // Calculate the points of a rectangle on the ReferencePlane
             XYZ p1 = origin + new XYZ(0, 0, height);
